@@ -6,7 +6,7 @@ function repeat(string, times) {
   return string + repeat(string, times - 1);
 }
 
-function cellBorder(string) {
+function verticalBorder(string) {
   return ' | ' + string;
 }
 
@@ -20,7 +20,7 @@ function isLadder(number) {
   return isLadderFound || number === 22 || number === 41 || number === 54;
 }
 
-function border(number) {
+function horizontalBorder(number) {
   if (number === 1) {
     return ' ┏────' + repeat('┯────', 9) + '┓\n | 🏁';
   }
@@ -30,20 +30,20 @@ function border(number) {
   if (number % 10 === 0) {
     return ' | ' + number + ' |\n ┣' + repeat('────┿', 9) + '────┫\n';
   }
-  return number < 10 ? cellBorder('0' + number) : cellBorder(number);
+  return number < 10 ? verticalBorder('0' + number) : verticalBorder(number);
 }
 
 function specialBorder(number, special) {
   if (number === 1) {
-    return ' ┏────' + repeat('┯────', 9) + '┓\n' + cellBorder(special);
+    return ' ┏────' + repeat('┯────', 9) + '┓\n' + verticalBorder(special);
   }
   if (number === 100) {
-    return cellBorder(special) + ' | \n ┗────' + repeat('┷────', 9) + '┛';
+    return verticalBorder(special) + ' | \n ┗────' + repeat('┷────', 9) + '┛';
   }
   if (number % 10 === 0) {
-    return cellBorder(special) + ' |\n ┣' + repeat('────┿', 9) + '────┫\n';
+    return verticalBorder(special) + ' |\n ┣' + repeat('────┿', 9) + '────┫\n';
   }
-  return cellBorder(special);
+  return verticalBorder(special);
 }
 
 function box(number, player1, player2) {
@@ -59,14 +59,14 @@ function box(number, player1, player2) {
   if (isLadder(number)) {
     return specialBorder(number, '🪜');
   }
-  return border(number);
+  return horizontalBorder(number);
 }
 
-function map(player1, player2) {
-  console.clear();
+function board(player1, player2) {
   let boxStr = '';
-  for (let i = 1; i < 101; i++) {
-    boxStr = boxStr + box(i, player1, player2);
+
+  for (let boxIndex = 1; boxIndex < 101; boxIndex++) {
+    boxStr = boxStr + box(boxIndex, player1, player2);
   }
   return boxStr;
 }
@@ -75,29 +75,76 @@ function turnDice() {
   return Math.ceil(Math.random() * 12);
 }
 
-function startGame(player1, player2, turn) {
-  if (player1 > 99) {
-    return 'Player-1 win';
+function getSnakeLadder(position) {
+  switch (position) {
+    case 4: return 56;
+    case 12: return 50;
+    case 14: return 55;
+    case 22: return 58;
+    case 41: return 79;
+    case 54: return 88;
+
+    case 96: return 42;
+    case 94: return 71;
+    case 75: return 32;
+    case 48: return 16;
+    case 37: return 3;
+    case 28: return 10;
+    default: return 0;
+  }
+}
+
+function getPosition(playerName, dicedPlayer, unDicedPlayer, turn) {
+  const diceValue = turnDice();// display the player name to show there turn
+  console.log('Dice Value:', diceValue);
+  dicedPlayer += diceValue;
+  const isSnakeBite = isSnake(dicedPlayer);
+  const isLadderClimb = isLadder(dicedPlayer);
+
+  if (isSnakeBite) {
+    console.log('Ooops!', playerName, '! Snake Bites');
   }
 
-  if (player2 > 99) {
-    return 'Player-2 win';
+  if (isLadderClimb) {
+    console.log('Hurry!', playerName, '! Climbed ladder');
+  }
+
+  if (isLadderClimb || isSnakeBite) {
+    dicedPlayer = getSnakeLadder(dicedPlayer);
+  }
+  if (turn) {
+    console.log(board(dicedPlayer, unDicedPlayer));
+  } else {
+    console.log(board(unDicedPlayer, dicedPlayer));
+  }
+
+  return dicedPlayer;
+}
+
+function startGame(player01Pos, player02Pos, turn, player01Name, player02Name) {
+  if (player01Pos > 99) {
+    return player01Name + ' Win';
+  }
+
+  if (player02Pos > 99) {
+    return player02Name + ' Win';
   }
 
   if (turn) {
-    console.log('Player-01 Turn\n');
+    console.log(player01Name, 'Turn\n');
     prompt('Press Enter for Roll the DICE');
-    player1 += turnDice();
+    console.clear();
+    player01Pos = getPosition(player01Name, player01Pos, player02Pos, turn);
   } else {
-    console.log('Player-02 Turn\n');
+    console.log(player02Name, 'Turn\n');
     prompt('Press Enter for Roll the DICE');
-    player2 += turnDice();
+    console.clear();
+    player02Pos = getPosition(player02Name, player02Pos, player01Pos, turn);
   }
+  console.log(player01Name, ':', player01Pos);
+  console.log(player02Name, ':', player02Pos);
 
-  console.log(map(player1, player2));
-  console.log('Player-01:', player1);
-  console.log('Player-02:', player2);
-  return startGame(player1, player2, !turn);
+  return startGame(player01Pos, player02Pos, !turn, player01Name, player02Name);
 }
 
-console.log(startGame(0, 0, true));
+console.log(startGame(0, 0, true, 'Ramu', 'Raghu'));
