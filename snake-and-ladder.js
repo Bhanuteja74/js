@@ -6,30 +6,60 @@ function repeat(string, times) {
   return string + repeat(string, times - 1);
 }
 
+function cellBorder(string) {
+  return ' | ' + string;
+}
+
+function isSnake(number) {
+  const isSnakeFound = number === 28 || number === 37 || number === 48;
+  return isSnakeFound || number === 75 || number === 94 || number === 96;
+}
+
+function isLadder(number) {
+  const isLadderFound = number === 4 || number === 12 || number === 14;
+  return isLadderFound || number === 22 || number === 41 || number === 54;
+}
+
+function border(number) {
+  if (number === 1) {
+    return ' ┏────' + repeat('┯────', 9) + '┓\n | 🏁';
+  }
+  if (number === 100) {
+    return ' | 🏆 | \n ┗────' + repeat('┷────', 9) + '┛';
+  }
+  if (number % 10 === 0) {
+    return ' | ' + number + ' |\n ┣' + repeat('────┿', 9) + '────┫\n';
+  }
+  return number < 10 ? cellBorder('0' + number) : cellBorder(number);
+}
+
+function specialBorder(number, special) {
+  if (number === 1) {
+    return ' ┏────' + repeat('┯────', 9) + '┓\n' + cellBorder(special);
+  }
+  if (number === 100) {
+    return cellBorder(special) + ' | \n ┗────' + repeat('┷────', 9) + '┛';
+  }
+  if (number % 10 === 0) {
+    return cellBorder(special) + ' |\n ┣' + repeat('────┿', 9) + '────┫\n';
+  }
+  return cellBorder(special);
+}
 
 function box(number, player1, player2) {
   if (number === player1) {
-    return ' | ⛹️‍♂️ ';
+    return specialBorder(number, '⛹️‍♂️ ');
   }
   if (number === player2) {
-    return ' | ⛹🏿 ';
+    return specialBorder(number, '⛹🏿 ');
   }
-  if (number === 28 || number === 37 || number === 48 || number === 75 || number === 94 || number === 96) {
-    return ' | 🐍';
+  if (isSnake(number)) {
+    return specialBorder(number, '🐍');
   }
-  if (number === 4 || number === 12 || number === 14 || number === 22 || number === 41 || number === 54) {
-    return ' | 🪜';
+  if (isLadder(number)) {
+    return specialBorder(number, '🪜');
   }
-  if (number === 1) {
-    return ' ' + repeat('─', 51) + '\n | 🏁';
-  }
-  if (number === 100) {
-    return ' | 🏆 | \n ' + repeat('─', 51);
-  }
-  if (number % 10 === 0) {
-    return ' | ' + number + ' |\n ' + repeat('─', 51) + '\n';
-  }
-  return number < 10 ? ' | 0' + number : ' | ' + number;
+  return border(number);
 }
 
 function map(player1, player2) {
@@ -56,11 +86,11 @@ function startGame(player1, player2, turn) {
 
   if (turn) {
     console.log('Player-01 Turn\n');
-    prompt('Press Any key for Roll the DICE');
+    prompt('Press Enter for Roll the DICE');
     player1 += turnDice();
   } else {
     console.log('Player-02 Turn\n');
-    prompt('Press Any key for Roll the DICE');
+    prompt('Press Enter for Roll the DICE');
     player2 += turnDice();
   }
 
