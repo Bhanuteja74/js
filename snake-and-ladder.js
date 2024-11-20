@@ -48,10 +48,14 @@ function specialBorder(number, special) {
 
 function box(number, player1, player2) {
   if (number === player1) {
-    return specialBorder(number, '⛹️‍♂️ ');
+    return player1 === player2 ?
+      specialBorder(number, '⛹️‍♂️⛹🏿') :
+      specialBorder(number, '⛹️‍♂️ ');
   }
   if (number === player2) {
-    return specialBorder(number, '⛹🏿 ');
+    return player1 === player2 ?
+      specialBorder(number, '⛹️‍♂️⛹🏿') :
+      specialBorder(number, '⛹🏿 ');
   }
   if (isSnake(number)) {
     return specialBorder(number, '🐍');
@@ -94,31 +98,39 @@ function getSnakeLadder(position) {
   }
 }
 
-function getPosition(playerName, dicedPlayer, unDicedPlayer, turn) {
-  const diceValue = turnDice();// display the player name to show there turn
-  console.log('Dice Value:', diceValue);
-  dicedPlayer += diceValue;
+function validDiceValue(dicedPlayer, diceValue) {
+  return diceValue + dicedPlayer > 100 ? dicedPlayer : diceValue + dicedPlayer;
+}
+
+function newPosition(playerName, dicedPlayer) {
   const isSnakeBite = isSnake(dicedPlayer);
   const isLadderClimb = isLadder(dicedPlayer);
 
   if (isSnakeBite) {
     console.log('Ooops!', playerName, '! Snake Bites');
+    return getSnakeLadder(dicedPlayer);
   }
-
   if (isLadderClimb) {
     console.log('Hurry!', playerName, '! Climbed ladder');
+    return getSnakeLadder(dicedPlayer);
   }
 
-  if (isLadderClimb || isSnakeBite) {
-    dicedPlayer = getSnakeLadder(dicedPlayer);
-  }
+  // console.log();
+  return dicedPlayer;
+}
+
+function getPosition(playerName, dicedPlayer, unDicedPlayer, turn) {
+  const diceValue = turnDice();// display the player name to show there turn
+  console.log('Dice Value:', diceValue);
+  dicedPlayer = validDiceValue(dicedPlayer, diceValue);
+
   if (turn) {
     console.log(board(dicedPlayer, unDicedPlayer));
   } else {
     console.log(board(unDicedPlayer, dicedPlayer));
   }
 
-  return dicedPlayer;
+  return newPosition(playerName, dicedPlayer);// store in varible if you want to display msg top
 }
 
 function startGame(player01Pos, player02Pos, turn, player01Name, player02Name) {
@@ -147,4 +159,8 @@ function startGame(player01Pos, player02Pos, turn, player01Name, player02Name) {
   return startGame(player01Pos, player02Pos, !turn, player01Name, player02Name);
 }
 
-console.log(startGame(0, 0, true, 'Ramu', 'Raghu'));
+function welcome() {
+  console.log(startGame(0, 0, true, 'Ramu', 'Raghu'));
+}
+
+welcome();
