@@ -1,80 +1,3 @@
-function repeat(string, times) {
-  if (times === 1) {
-    return string;
-  }
-
-  return string + repeat(string, times - 1);
-}
-
-function verticalBorder(string) {
-  return ' | ' + string;
-}
-
-function isSnake(number) {
-  const isSnakeFound = number === 28 || number === 37 || number === 48;
-  return isSnakeFound || number === 75 || number === 94 || number === 96;
-}
-
-function isLadder(number) {
-  const isLadderFound = number === 4 || number === 12 || number === 14;
-  return isLadderFound || number === 22 || number === 41 || number === 54;
-}
-
-function horizontalBorder(number) {
-  if (number === 1) {
-    return ' ┏────' + repeat('┯────', 9) + '┓\n | 🏁';
-  }
-  if (number === 100) {
-    return ' | 🏆 | \n ┗────' + repeat('┷────', 9) + '┛';
-  }
-  if (number % 10 === 0) {
-    return ' | ' + number + ' |\n ┣' + repeat('────┿', 9) + '────┫\n';
-  }
-  return number < 10 ? verticalBorder('0' + number) : verticalBorder(number);
-}
-
-function specialBorder(number, special) {
-  if (number === 1) {
-    return ' ┏────' + repeat('┯────', 9) + '┓\n' + verticalBorder(special);
-  }
-  if (number === 100) {
-    return verticalBorder(special) + ' | \n ┗────' + repeat('┷────', 9) + '┛';
-  }
-  if (number % 10 === 0) {
-    return verticalBorder(special) + ' |\n ┣' + repeat('────┿', 9) + '────┫\n';
-  }
-  return verticalBorder(special);
-}
-
-function prepareCell(number, player1, player2) {
-  if (number === player1) {
-    return player1 === player2 ?
-      specialBorder(number, '⛹️‍♂️⛹🏿') :
-      specialBorder(number, '⛹️‍♂️ ');
-  }
-  if (number === player2) {
-    return player1 === player2 ?
-      specialBorder(number, '⛹️‍♂️⛹🏿') :
-      specialBorder(number, '⛹🏿 ');
-  }
-  if (isSnake(number)) {
-    return specialBorder(number, '🐍');
-  }
-  if (isLadder(number)) {
-    return specialBorder(number, '🪜');
-  }
-  return horizontalBorder(number);
-}
-
-function board(player1, player2) {
-  let boxStr = '';
-
-  for (let boxIndex = 1; boxIndex < 101; boxIndex++) {
-    boxStr = boxStr + prepareCell(boxIndex, player1, player2);
-  }
-  return boxStr;
-}
-
 function diceSix() {
   const die = '┏━━━━━━━━┓\n' +
     '┃ 🟢  🟢 ┃\n' +
@@ -159,58 +82,168 @@ function turnDice() {
   return diceValue;
 }
 
+function repeat(string, times) {
+  if (times === 1) {
+    return string;
+  }
+
+  return string + repeat(string, times - 1);
+}
+
+function verticalBorder(string) {
+  return ' | ' + string;
+}
+
+function isSnake(number) {
+  const isSnakeFound = number === 28 || number === 37 || number === 48;
+  return isSnakeFound || number === 75 || number === 94 || number === 96;
+}
+
+function isLadder(number) {
+  const isLadderFound = number === 4 || number === 12 || number === 14;
+  return isLadderFound || number === 22 || number === 41 || number === 54;
+}
+
+function horizontalBorder(number) {
+  if (number === 1) {
+    return ' ┏────' + repeat('┯────', 9) + '┓\n | 🏁';
+  }
+  if (number === 100) {
+    return ' | 🏆 | \n ┗────' + repeat('┷────', 9) + '┛';
+  }
+  if (number % 10 === 0) {
+    return ' | ' + number + ' |\n ┣' + repeat('────┿', 9) + '────┫\n';
+  }
+  return number < 10 ? verticalBorder('0' + number) : verticalBorder(number);
+}
+
+function specialBorder(number, special) {
+  if (number === 1) {
+    return ' ┏────' + repeat('┯────', 9) + '┓\n' + verticalBorder(special);
+  }
+  if (number === 100) {
+    return verticalBorder(special) + ' | \n ┗────' + repeat('┷────', 9) + '┛';
+  }
+  if (number % 10 === 0) {
+    return verticalBorder(special) + ' |\n ┣' + repeat('────┿', 9) + '────┫\n';
+  }
+  return verticalBorder(special);
+}
+
+function prepareCell(number, player1, player2) {
+  if (number === player1) {
+    return player1 === player2 ?
+      specialBorder(number, '⛹️‍♂️⛹🏿') :
+      specialBorder(number, '⛹️‍♂️ ');
+  }
+  if (number === player2) {
+    return player1 === player2 ?
+      specialBorder(number, '⛹️‍♂️⛹🏿') :
+      specialBorder(number, '⛹🏿 ');
+  }
+  if (isSnake(number)) {
+    return specialBorder(number, '🐍');
+  }
+  if (isLadder(number)) {
+    return specialBorder(number, '🪜');
+  }
+  return horizontalBorder(number);
+}
+
+function board(player1, player2) {
+  let boxStr = '';
+
+  for (let boxIndex = 1; boxIndex < 101; boxIndex++) {
+    boxStr = boxStr + prepareCell(boxIndex, player1, player2);
+  }
+  return boxStr;
+}
+
 function getSnakeLadder(position) {
   switch (position) {
-    case 4: return 56;
-    case 12: return 50;
-    case 14: return 55;
-    case 22: return 58;
-    case 41: return 79;
-    case 54: return 88;
+    case 4: return 52;
+    case 12: return 38;
+    case 14: return 41;
+    case 22: return 36;
+    case 41: return 38;
+    case 54: return 34;
 
-    case 96: return 42;
-    case 94: return 71;
-    case 75: return 32;
-    case 48: return 16;
-    case 37: return 3;
-    case 28: return 10;
+    case 96: return 54;
+    case 94: return 23;
+    case 75: return 43;
+    case 48: return 32;
+    case 37: return 34;
+    case 28: return 18;
     default: return 0;
   }
 }
 
 function validDiceValue(dicedPlayer, diceValue) {
-  return diceValue + dicedPlayer > 100 ? dicedPlayer : diceValue + dicedPlayer;
+  return diceValue + dicedPlayer > 100 ? 0 : diceValue;
 }
 
-function newPosition(playerName, dicedPlayer) {
+function newPosition(playerName, player01Pos, player02Pos, turn) {
+  const dicedPlayer = turn ? player01Pos : player02Pos;
   const isSnakeBite = isSnake(dicedPlayer);
   const isLadderClimb = isLadder(dicedPlayer);
+  let way = 1;
 
   if (isSnakeBite) {
-    console.log('Ooops!', playerName, '! Snake Bites');
-    return getSnakeLadder(dicedPlayer);
+    console.log(playerName, '! 🙁😢😓 Oops! Your are bitten by 🐍🐍🐍 Snake 🐍🐍🐍');
+    for (let i = 0; i < 5; i++) {
+      console.log(i);
+      wait(2);
+    }
+    way = -1;
   }
   if (isLadderClimb) {
-    console.log('Hurry!', playerName, '! Climbed ladder');
-    return getSnakeLadder(dicedPlayer);
+    console.log(playerName, '! 😎🤩😜 Your are Climbed ladder');
+    for (let i = 0; i < 5; i++) {
+      console.log(i);
+      wait(2);
+    }
   }
 
-  // console.log();
-  return dicedPlayer;
+  const jumpTo = getSnakeLadder(dicedPlayer);
+  if (jumpTo !== 0) {
+    move(player01Pos, player02Pos, turn, jumpTo, way);
+  }
+
+  return dicedPlayer + (jumpTo * way);
 }
 
-function getPosition(playerName, dicedPlayer, unDicedPlayer, turn) {
-  const diceValue = turnDice();// display the player name to show there turn
-  console.log('Dice Value:', diceValue);
-  dicedPlayer = validDiceValue(dicedPlayer, diceValue);
-  const newPos = newPosition(playerName, dicedPlayer);
-
+function move(player01Pos, player02Pos, turn, validDice, way) {
+  // prompt('Press ENTER to move.');
   if (turn) {
-    console.log(board(newPos, unDicedPlayer));
-  } else {
-    console.log(board(unDicedPlayer, newPos));
+    for (let moveNumber = 1; moveNumber <= validDice; moveNumber++) {
+      console.clear();
+      console.log(board(player01Pos + (moveNumber * way), player02Pos));
+      wait(1.3);
+    }
+    return;
   }
 
+  for (let moveNumber = 1; moveNumber <= validDice; moveNumber++) {
+    console.clear();
+    console.log(board(player01Pos, player02Pos + (moveNumber * way)));
+    wait(1.3);
+  }
+}
+
+function getPosition(playerName, player01Pos, player02Pos, turn) {
+  const diceValue = turnDice();// display the player name to show there turn
+  console.log('Dice Value:', diceValue);
+  const validDice = validDiceValue(player01Pos, diceValue);
+  move(player01Pos, player02Pos, turn, validDice, 1);
+
+  if (turn) {
+    player01Pos += validDice;
+    const newPos = newPosition(playerName, player01Pos, player02Pos, turn);
+    return newPos;
+  }
+
+  player02Pos += validDice;
+  const newPos = newPosition(playerName, player01Pos, player02Pos, turn);
   return newPos;
 }
 
@@ -226,14 +259,13 @@ function startGame(player01Pos, player02Pos, turn, player01Name, player02Name) {
   if (turn) {
     console.log(player01Name, 'Turn\n');
     prompt('Press Enter for Roll the DICE');
-    console.clear();
     player01Pos = getPosition(player01Name, player01Pos, player02Pos, turn);
   } else {
     console.log(player02Name, 'Turn\n');
     prompt('Press Enter for Roll the DICE');
-    console.clear();
-    player02Pos = getPosition(player02Name, player02Pos, player01Pos, turn);
+    player02Pos = getPosition(player02Name, player01Pos, player02Pos, turn);
   }
+
   console.log(player01Name, ':', player01Pos);
   console.log(player02Name, ':', player02Pos);
 
