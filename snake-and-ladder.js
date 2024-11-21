@@ -1,3 +1,11 @@
+
+function logo() {
+  console.log(`
+              ┏━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+              ┃     SNAKE🐍 & LADDER🪜   ┃
+              ┗━━━━━━━━━━━━━━━━━━━━━━━━━━┛`);
+}
+
 function diceSix() {
   const die = '┏━━━━━━━━┓\n' +
     '┃ 🟢  🟢 ┃\n' +
@@ -54,6 +62,7 @@ function diceOne() {
 
 function displayDice(number) {
   console.clear();
+  logo();
   switch (number) {
     case 1: return diceOne();
     case 2: return diceTwo();
@@ -213,20 +222,21 @@ function newPosition(playerName, player01Pos, player02Pos, turn) {
 }
 
 function move(player01Pos, player02Pos, turn, validDice, way) {
-  // prompt('Press ENTER to move.');
   if (turn) {
     for (let moveNumber = 1; moveNumber <= validDice; moveNumber++) {
       console.clear();
+      logo();
       console.log(board(player01Pos + (moveNumber * way), player02Pos));
-      wait(1.3);
+      wait(1.5);
     }
     return;
   }
 
   for (let moveNumber = 1; moveNumber <= validDice; moveNumber++) {
     console.clear();
+    logo();
     console.log(board(player01Pos, player02Pos + (moveNumber * way)));
-    wait(1.3);
+    wait(1.5);
   }
 }
 
@@ -273,6 +283,7 @@ function startGame(player01Pos, player02Pos, turn, player01Name, player02Name) {
 }
 
 function welcome() {
+  logo();
   console.log('welcome to the game');
   const player01Name = prompt('Enter the first player name:');
   const player02Name = prompt('Enter the second player name:');
