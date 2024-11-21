@@ -46,7 +46,7 @@ function specialBorder(number, special) {
   return verticalBorder(special);
 }
 
-function box(number, player1, player2) {
+function prepareCell(number, player1, player2) {
   if (number === player1) {
     return player1 === player2 ?
       specialBorder(number, '⛹️‍♂️⛹🏿') :
@@ -70,7 +70,7 @@ function board(player1, player2) {
   let boxStr = '';
 
   for (let boxIndex = 1; boxIndex < 101; boxIndex++) {
-    boxStr = boxStr + box(boxIndex, player1, player2);
+    boxStr = boxStr + prepareCell(boxIndex, player1, player2);
   }
   return boxStr;
 }
@@ -123,14 +123,15 @@ function getPosition(playerName, dicedPlayer, unDicedPlayer, turn) {
   const diceValue = turnDice();// display the player name to show there turn
   console.log('Dice Value:', diceValue);
   dicedPlayer = validDiceValue(dicedPlayer, diceValue);
+  const newPos = newPosition(playerName, dicedPlayer);
 
   if (turn) {
-    console.log(board(dicedPlayer, unDicedPlayer));
+    console.log(board(newPos, unDicedPlayer));
   } else {
-    console.log(board(unDicedPlayer, dicedPlayer));
+    console.log(board(unDicedPlayer, newPos));
   }
 
-  return newPosition(playerName, dicedPlayer);// store in varible if you want to display msg top
+  return newPos;
 }
 
 function startGame(player01Pos, player02Pos, turn, player01Name, player02Name) {
@@ -160,7 +161,10 @@ function startGame(player01Pos, player02Pos, turn, player01Name, player02Name) {
 }
 
 function welcome() {
-  console.log(startGame(0, 0, true, 'Ramu', 'Raghu'));
+  console.log('welcome to the game');
+  const player01Name = prompt('Enter the first player name:');
+  const player02Name = prompt('Enter the second player name:');
+  console.log(startGame(0, 0, true, player01Name, player02Name));
 }
 
 welcome();
