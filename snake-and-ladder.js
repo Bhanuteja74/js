@@ -1,66 +1,61 @@
+let diceImg = diceSix();
 
 function logo() {
   console.log(`
-              ┏━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
-              ┃     SNAKE🐍 & LADDER🪜   ┃
-              ┗━━━━━━━━━━━━━━━━━━━━━━━━━━┛`);
+             ┏━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+             ┃     SNAKE🐍 & LADDER🪜   ┃
+             ┗━━━━━━━━━━━━━━━━━━━━━━━━━━┛`);
 }
 
 function diceSix() {
-  const die = '┏━━━━━━━━┓\n' +
-    '┃ 🟢  🟢 ┃\n' +
-    '┃ 🟢  🟢 ┃\n' +
-    '┃ 🟢  🟢 ┃\n' +
-    '┗━━━━━━━━┛'
-  console.log(die);
+  return `                      ┏━━━━━━━━┓
+                      ┃ 🟢  🟢 ┃
+                      ┃ 🟢  🟢 ┃
+                      ┃ 🟢  🟢 ┃
+                      ┗━━━━━━━━┛`
 }
 
 function diceFive() {
-  const die = '┏━━━━━━━━┓\n' +
-    '┃ 🟢  🟢 ┃\n' +
-    '┃   🟢   ┃\n' +
-    '┃ 🟢  🟢 ┃\n' +
-    '┗━━━━━━━━┛'
-  console.log(die);
+  return `                      ┏━━━━━━━━┓
+                      ┃ 🟢  🟢 ┃
+                      ┃   🟢   ┃
+                      ┃ 🟢  🟢 ┃
+                      ┗━━━━━━━━┛`
 }
 
 function diceFour() {
-  const die = '┏━━━━━━━━┓\n' +
-    '┃ 🟢  🟢 ┃\n' +
-    '┃        ┃\n' +
-    '┃ 🟢  🟢 ┃\n' +
-    '┗━━━━━━━━┛'
-  console.log(die);
+  return `                      ┏━━━━━━━━┓
+                      ┃ 🟢  🟢 ┃
+                      ┃        ┃
+                      ┃ 🟢  🟢 ┃
+                      ┗━━━━━━━━┛`
 }
 
 function diceThree() {
-  const die = '┏━━━━━━━━┓\n' +
-    '┃   🟢   ┃\n' +
-    '┃        ┃\n' +
-    '┃🟢    🟢┃\n' +
-    '┗━━━━━━━━┛'
-  console.log(die);
+  return `                      ┏━━━━━━━━┓
+                      ┃   🟢   ┃
+                      ┃        ┃
+                      ┃ 🟢  🟢 ┃
+                      ┗━━━━━━━━┛`
 }
 
 function diceTwo() {
-  const die = '┏━━━━━━━━┓\n' +
-    '┃        ┃\n' +
-    '┃ 🟢  🟢 ┃\n' +
-    '┃        ┃\n' +
-    '┗━━━━━━━━┛'
-  console.log(die);
+  return `                      ┏━━━━━━━━┓
+                      ┃        ┃
+                      ┃ 🟢  🟢 ┃
+                      ┃        ┃
+                      ┗━━━━━━━━┛`
 }
 
 function diceOne() {
-  const die = '┏━━━━━━━━┓\n' +
-    '┃        ┃\n' +
-    '┃   🟢   ┃\n' +
-    '┃        ┃\n' +
-    '┗━━━━━━━━┛'
-  console.log(die);
+  return `                      ┏━━━━━━━━┓
+                      ┃        ┃
+                      ┃   🟢   ┃
+                      ┃        ┃
+                      ┗━━━━━━━━┛`
 }
 
-function displayDice(number) {
+function getDiceImg(number) {
   console.clear();
   logo();
   switch (number) {
@@ -82,12 +77,13 @@ function wait(seconds) {
 function turnDice() {
   for (let rollingTime = 0; rollingTime < 9; rollingTime++) {
     const diceRolling = Math.ceil(Math.random() * 6);
-    displayDice(diceRolling);
+    console.log(getDiceImg(diceRolling));
     wait(.9);
   }
 
   const diceValue = Math.ceil(Math.random() * 6);
-  displayDice(diceValue);
+  diceImg = getDiceImg(diceValue);
+  console.log(diceImg);
   return diceValue;
 }
 
@@ -142,13 +138,13 @@ function specialBorder(number, special) {
 function prepareCell(number, player1, player2) {
   if (number === player1) {
     return player1 === player2 ?
-      specialBorder(number, '⛹️‍♂️⛹🏿') :
+      specialBorder(number, '⛹️‍♂️⛹️‍♀️') :
       specialBorder(number, '⛹️‍♂️ ');
   }
   if (number === player2) {
     return player1 === player2 ?
-      specialBorder(number, '⛹️‍♂️⛹🏿') :
-      specialBorder(number, '⛹🏿 ');
+      specialBorder(number, '⛹️‍♂️⛹️‍♀️') :
+      specialBorder(number, '⛹️‍♀️ ');
   }
   if (isSnake(number)) {
     return specialBorder(number, '🐍');
@@ -226,15 +222,17 @@ function move(player01Pos, player02Pos, turn, validDice, way) {
     for (let moveNumber = 1; moveNumber <= validDice; moveNumber++) {
       console.clear();
       logo();
+      console.log(diceImg);
       console.log(board(player01Pos + (moveNumber * way), player02Pos));
       wait(1.5);
     }
     return;
   }
-
+  
   for (let moveNumber = 1; moveNumber <= validDice; moveNumber++) {
     console.clear();
     logo();
+    console.log(diceImg);
     console.log(board(player01Pos, player02Pos + (moveNumber * way)));
     wait(1.5);
   }
@@ -284,7 +282,7 @@ function startGame(player01Pos, player02Pos, turn, player01Name, player02Name) {
 
 function welcome() {
   logo();
-  console.log('welcome to the game');
+  console.log('\n🙏 Welcome To The Game 🙏 ');
   const player01Name = prompt('Enter the first player name:');
   const player02Name = prompt('Enter the second player name:');
   console.log(startGame(0, 0, true, player01Name, player02Name));
