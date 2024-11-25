@@ -1,0 +1,60 @@
+const WIDTH = 50;
+const HEIGHT = 15;
+let screen = repeat(' ', WIDTH * HEIGHT);
+
+function wait(seconds) {
+  for (let s = 0; s < seconds * 100; s++) {
+    for (let ms = 0; ms < s * 50000; ms++) { }
+  }
+}
+
+function randomInt(start, end) {
+  return start + Math.floor(Math.random() * (end - start));
+}
+
+function repeat(string, times) {
+  if (times === 0) {
+    return '';
+  }
+
+  return string + repeat(string, times - 1);
+}
+
+function slice(string, start, end) {
+  let slicedStr = '';
+  for (let index = start; index < end; index++) {
+    slicedStr += string[index];
+  }
+
+  return slicedStr;
+}
+
+function putScreen(screen) {
+  for (let y = 0; y < HEIGHT; y++) {
+    const x = y * WIDTH;
+    console.log(slice(screen, x, x + WIDTH));
+  }
+}
+
+function updateScreen(screen, x, y, char) {
+  const updatePos = (y * WIDTH) + x;
+  const fisrtHalfScreen = slice(screen, 0, updatePos);
+  const secondHalfScreen = slice(screen, updatePos + 1, WIDTH * HEIGHT);
+  const updatedChar = Math.random() < 0.05 ? char : ' ';
+
+  return fisrtHalfScreen + updatedChar + secondHalfScreen;
+}
+
+function anime() {
+  while (true) {
+    console.clear();
+    const x = randomInt(0, WIDTH);
+    const y = randomInt(0, HEIGHT);
+
+    screen = updateScreen(screen, x, y, '*');
+    putScreen(screen);
+    wait(.12);
+  }
+}
+
+anime();
