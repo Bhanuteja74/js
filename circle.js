@@ -1,5 +1,5 @@
-const WIDTH = 100;
-const HEIGHT = 50;
+const WIDTH = 150;
+const HEIGHT = 100;
 const RADIUS = 20;
 
 
@@ -59,16 +59,19 @@ function yCordinator(radians, waveLength, dist) {
 
 function anime() {
   let screen = repeat('_', WIDTH * HEIGHT);
-  console.log(screen);
+  let xCenter = WIDTH / 2;
+  let yCenter = HEIGHT / 2;
 
-  for (let index = 0; index < 31.5; index += .1) {
-    console.clear();
-    const x = xCordinator(index, .2, WIDTH / 2);
-    const y = yCordinator(index, .2, HEIGHT / 2);
+  for (let i = 0; i < 10; i++) {
+    for (let index = 0; index < 31.5; index += .5) {
+      console.clear();
+      const x = xCordinator(index, .2, xCenter + i);
+      const y = yCordinator(index, .2, yCenter + i);
 
-    screen = updateScreen(screen, x, y, 'X');
-    putScreen(screen);
-    wait(.5);
+      screen = updateScreen(screen, x, y, 'X');
+      putScreen(screen);
+      wait(.5);
+    }
   }
 }
 
