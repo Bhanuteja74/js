@@ -1,4 +1,3 @@
-
 const WIDTH = 100;
 const HEIGHT = 4;
 
@@ -35,41 +34,55 @@ function slice(string, start, end) {
   return slicedStr;
 }
 
-function putScreen(screen) {
-  for (let y = 0; y < HEIGHT; y++) {
-    const x = y * WIDTH;
-    console.log(slice(screen, x, x + WIDTH));
-  }
-}
-
-function putCar(screen, objectLength) {
+function putCar(screen, width, heigth, objectLength) {
   let updatedScreen = '';
 
-  for (let index = 0; index < HEIGHT; index++) {
-    const start = (index * WIDTH) + objectLength;
-    const end = (index + 1) * WIDTH;
+  for (let index = 0; index < heigth; index++) {
+    const start = (index * width) + objectLength;
+    const end = (index + 1) * width;
     updatedScreen += carParts(index) + slice(screen, start, end);
   }
 
   return updatedScreen;
 }
 
-function moveObject(screen) {
-  let s = '';
-  for (let y = 0; y < 4; y++) {
-    const start = y * WIDTH;
-    const end = start + WIDTH - 1;
-    s += screen[end] + slice(screen, start, end);
+function movedScreen(screen, speed, end) {
+  let frontScreen = '';
+  for (let i = 0; i < speed; i++) {
+    frontScreen = screen[end--] + frontScreen;
   }
-  return s;
+  return frontScreen;
 }
 
-let screen = repeat('-', WIDTH * HEIGHT);
-screen = putCar(screen, 16);
+function moveObject(screen, width, heigth, speed) {
+  let movedObject = '';
+  for (let y = 0; y < heigth; y++) {
+    const start = y * width;
+    const end = start + width - speed;
 
-for (let i = 0; i < 200; i++) {
-  console.clear();
-  screen = moveObject(screen);
-  putScreen(screen);
-  wait(.7);
+    movedObject += movedScreen(screen, speed, end) + slice(screen, start, end);
+  }
+  return movedObject;
 }
+
+function putScreen(screen, width, heigth) {
+  for (let y = 0; y < heigth; y++) {
+    const x = y * width;
+    console.log(slice(screen, x, x + width));
+  }
+}
+
+function carMove() {
+  let screen = repeat('-', WIDTH * HEIGHT);
+  screen = putCar(screen, WIDTH, HEIGHT, 16);
+  putScreen(screen, WIDTH, HEIGHT);
+
+  for (let i = 0; i < 100; i++) {
+    console.clear();
+    screen = moveObject(screen, WIDTH, HEIGHT, 1);
+    putScreen(screen, WIDTH, HEIGHT);
+    wait(.7);
+  }
+}
+
+carMove()
