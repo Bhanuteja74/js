@@ -11,9 +11,9 @@ function winnings(index) {
   }
 }
 
-function checkWin(playerMoves) {
+function checkWin(playerselects) {
   for (let index = 0; index < 8; index++) {
-    if (isSubset(playerMoves, winnings(index))) {
+    if (isSubset(playerselects, winnings(index))) {
       return true;
     }
   }
@@ -42,18 +42,91 @@ function isSubset(mainSet, subSet) {
 }
 
 function getPlayerChoice() {
-  const choice = prompt('Enter choice:');
-  return choice;
+  const choice = +prompt('Enter Valid choice:');
+  if (choice > 0 && choice < 10) {
+    return choice + '';
+  }
+
+  console.log('Please Enter Valid Number between 1 to 10.');
+  return getPlayerChoice();
 }
 
-function getChoice(firstPlayerMoves, secondPlayerMoves, turn) {
+function getChoice(firstPlayerselects, secondPlayerselects, turn) {
   const playerChoice = getPlayerChoice();
-  if (isSubset(firstPlayerMoves, playerChoice) || isSubset(secondPlayerMoves, playerChoice)) {
-    console.log('Invalid');
-    getChoice(firstPlayerMoves, secondPlayerMoves, turn);
+  if (isSubset(firstPlayerselects, playerChoice) || isSubset(secondPlayerselects, playerChoice)) {
+    console.log('Choice already selected. Please selected Again.');
+    getChoice(firstPlayerselects, secondPlayerselects, turn);
   }
 
   return playerChoice;
+}
+
+function winMessage(firstPlayer, secondPlayer, turn) {
+  const wonPlayer = turn ? firstPlayer : secondPlayer;
+  const lossPlayer = !turn ? firstPlayer : secondPlayer;
+
+  console.log('Congratualations! ', wonPlayer, 'You won the game');
+  console.log('Better luck next time! ', lossPlayer);
+}
+
+function drawMessage() {
+  console.log('GAME DRAW');
+}
+
+function gameDraw(firstPlayerselects, secondPlayerselects) {
+  return firstPlayerselects.length + secondPlayerselects.length > 8;
+}
+
+function gameOver(firstPlayer, secondPlayer, firstPlayerselects, secondPlayerselects, playerWon, turn) {
+  if (playerWon) {
+    winMessage(firstPlayer, secondPlayer, turn);
+  }
+
+  const isGameDraw = gameDraw(firstPlayerselects, secondPlayerselects);
+  if (isGameDraw) {
+    drawMessage();
+  }
+
+  return playerWon || isGameDraw;
+}
+
+function displayselects(firstPlayer, secondPlayer, firstPlayerselects, secondPlayerselects) {
+  console.log(firstPlayer, ': selects:', firstPlayerselects);
+  console.log(secondPlayer, ': selects:', secondPlayerselects + '\n');
+}
+
+
+function startGame(firstPlayer, secondPlayer) {
+  let firstPlayerselects = '';
+  let secondPlayerselects = '';
+  let turn = true;
+  let isGameOver = false;
+
+  while (!isGameOver) {
+    const choice = getChoice(firstPlayerselects, secondPlayerselects, turn);
+    let playerWon = false;
+
+    if (turn) {
+      firstPlayerselects += choice;
+      playerWon = checkWin(firstPlayerselects);
+    } else {
+      secondPlayerselects += choice;
+      playerWon = checkWin(secondPlayerselects);
+    }
+
+    isGameOver = gameOver(
+      firstPlayer,
+      secondPlayer,
+      firstPlayerselects,
+      secondPlayerselects,
+      playerWon,
+      turn
+    );
+
+
+    displayselects(firstPlayer, secondPlayer, firstPlayerselects, secondPlayerselects);
+    turn = !turn;
+  }
 }
 
 function getFirstPlayerDetailes() {
@@ -65,34 +138,17 @@ function getSecondPlayerDetailes() {
   return 'raj';
 }
 
-function startGame() {
-  let firstPlayerMoves = '';
-  let secondPlayerMoves = '';
-  let turn = true;
-  let isGameOver = false;
-
-  while (!isGameOver) {
-    const choice = getChoice(firstPlayerMoves, secondPlayerMoves, turn);
-    let playerWon = false;
-
-    if (turn) {
-      firstPlayerMoves += choice;
-      playerWon = checkWin(firstPlayerMoves);
-    } else {
-      secondPlayerMoves += choice;
-      playerWon = checkWin(secondPlayerMoves);
-    }
-    
-    turn = !turn;
-    isGameOver = playerWon;
-  }
+function welcomeMessage() {
+  console.log('Welcome To Tic-Tac-Toe');
 }
 
 function start() {
-  // welcomeMessage();
+  welcomeMessage();
   const firstPlayer = getFirstPlayerDetailes();
   const secondPlayer = getSecondPlayerDetailes();
   startGame(firstPlayer, secondPlayer);
+
+  console.log('Thankyou for Playing');
 }
 
 start();
